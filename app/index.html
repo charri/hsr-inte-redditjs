@@ -56,14 +56,14 @@
             </div>
             <div class="navbar-collapse collapse">
                 <div ng-controller="UserLoginCtrl" ng-cloak class="ng-cloak">
-                    <div ng-show="hasUser">
+                    <div ng-show="$root.hasUser">
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="#">Hello <strong>{{user.name}}</strong></a></li>
                             <li>&nbsp;&nbsp;<button  class="btn btn-success" ng-click="_logout()">Logout</button></li>
                         </ul>
                     </div>
 
-                    <div ng-hide="hasUser">
+                    <div ng-hide="$root.hasUser">
                         <form class="navbar-form navbar-right" role="form" style="margin-top:2px;">
                             <div class="form-group">
                                 <input type="text" class="form-control" ng-model="login.name" placeholder="username" />

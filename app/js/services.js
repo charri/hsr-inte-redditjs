@@ -9,14 +9,18 @@ redditServices.service('Html', [function() {
 
 
 redditServices.factory('Entry', ['$resource', function($resource) {
-    return $resource('/entry/:id', {}, {
-        query: {method:'GET', params:{id:''}, isArray:true}
+
+    return $resource('/entry/:id', { id : '@id' }, {
+        query: {method:'GET', isArray:true , url : '/entries'},
+        up: { method : 'POST', url : '/entry/:id/up' },
+        down: { method : 'POST', url : '/entry/:id/down' }
     });
+
+
 }]);
 
-
 redditServices.factory("AuthService", ['$http', '$q', '$window',  function($http, $q, $window) {
-    var userInfo;
+    var userInfo = false;
 
     function login(userName, password) {
         var deferred = $q.defer();
@@ -59,8 +63,11 @@ redditServices.factory("AuthService", ['$http', '$q', '$window',  function($http
         return userInfo;
     };
 
+    function hasUser() {
+        return userInfo && userInfo.name;
+    }
+
     function init() {
-        console.log('init');
         if ($window.sessionStorage["userInfo"]) {
             userInfo = JSON.parse($window.sessionStorage["userInfo"]);
         }
@@ -70,6 +77,31 @@ redditServices.factory("AuthService", ['$http', '$q', '$window',  function($http
         init : init,
         login: login,
         logout : logout,
-        getUserInfo : getUserInfo
+        getUserInfo : getUserInfo,
+        hasUser : hasUser
     };
 }]);
+
+redditServices.factory('Socket', function ($rootScope) {
+    var socket = io.connect();
+    return {
+        on: function (eventName, callback) {
+            socket.on(eventName, function () {
+                var args = arguments;
+                $rootScope.$apply(function () {
+                    callback.apply(socket, args);
+                });
+            });
+        },
+        emit: function (eventName, data, callback) {
+            socket.emit(eventName, data, function () {
+                var args = arguments;
+                $rootScope.$apply(function () {
+                    if (callback) {
+                        callback.apply(socket, args);
+                    }
+                });
+            })
+        }
+    };
+});

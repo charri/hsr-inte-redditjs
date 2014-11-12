@@ -25,7 +25,7 @@ function checkAuth(req, res, next) {
     if (typeof(req.session.user_id) == "number") {
         next();
     } else {
-        res.send('You are not authorized!');
+        res.send(403, 'You are not authorized!');
     }
 }
 
@@ -112,7 +112,7 @@ app.get('/login', function (req, res) {
 
  
  
- app.get('/entry', function (req, res) {
+ app.get('/entries', function (req, res) {
     res.json(entries);
 });
 
@@ -186,9 +186,6 @@ app.get('*', function(req, res, next) {
             res.sendfile(__dirname + '/app/index.html');
         }
     });
-
-
-    //if (/^\/app\/(js|libs|partials)\//.test(req.url))
 
 });
 
