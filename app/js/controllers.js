@@ -37,6 +37,26 @@ redditControllers.controller('SubmitCtrl', ['$scope', 'Entry', 'Html', '$locatio
 
 }]);
 
+redditControllers.controller('RegisterCtrl', ['$scope', 'User', 'Html', '$location', 'AuthService', '$rootScope',
+    function($scope, User, Html, $location, AuthService, $rootScope) {
+
+    $scope.user = new User();
+
+    Html.setTitle('register');
+
+    $scope.$save = function() {
+        $scope.user.$save(function(result) {
+            if(!result) return;
+
+            AuthService.login($scope.user.name, $scope.user.password).then(function() {
+                $rootScope.hasUser = AuthService.hasUser();
+                $location.path('/entries/');
+            });
+        });
+    };
+
+}]);
+
 redditControllers.controller('EntryDetailCtrl', ['$scope', '$routeParams', 'Entry', 'Html', function($scope, $routeParams, Entry, Html) {
 
     $scope.entry = Entry.get({ id : $routeParams.entryId}, function(entry) {
@@ -49,11 +69,14 @@ redditControllers.controller('EntryDetailCtrl', ['$scope', '$routeParams', 'Entr
 
 redditControllers.controller('UserLoginCtrl', ['$scope', 'AuthService', '$rootScope', function($scope, AuthService, $rootScope) {
 
-    var _resolveUser = function() {
-        $rootScope.hasUser = AuthService.hasUser();
+    $rootScope.$watch('hasUser', function() {
         $scope.user = $scope.hasUser ? AuthService.getUserInfo() : undefined;
         $scope.login = { name : undefined, password : undefined };
-    }
+    });
+
+    var _resolveUser = function() {
+        $rootScope.hasUser = AuthService.hasUser();
+    };
 
     _resolveUser();
 

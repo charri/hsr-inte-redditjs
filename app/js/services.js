@@ -9,14 +9,18 @@ redditServices.service('Html', [function() {
 
 
 redditServices.factory('Entry', ['$resource', function($resource) {
-
     return $resource('/entry/:id', { id : '@id' }, {
         query: {method:'GET', isArray:true , url : '/entries'},
         up: { method : 'POST', url : '/entry/:id/up' },
         down: { method : 'POST', url : '/entry/:id/down' }
     });
+}]);
 
-
+redditServices.factory('User', ['$resource', function($resource) {
+    return $resource('/entry/:id', { id : '@id' }, {
+        query: {method:'GET', isArray:true , url : '/users'},
+        save: { method : 'POST', url : '/register' }
+    });
 }]);
 
 redditServices.factory("AuthService", ['$http', '$q', '$window',  function($http, $q, $window) {

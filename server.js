@@ -102,8 +102,9 @@ app.get('/login', function (req, res) {
          res.json(false);
          return;
      }
-     users.push(new User(users.length, post.name, post.password));
-     res.json(true);
+     var user = new User(users.length, post.name, post.password);
+     users.push(user);
+     res.json(user);
  });
  
  app.get('/users', function (req, res) {
