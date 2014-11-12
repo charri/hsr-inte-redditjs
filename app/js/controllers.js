@@ -33,8 +33,25 @@ redditControllers.controller('EntryDetailCtrl', ['$scope', '$routeParams', 'Entr
 
 }]);
 
-redditControllers.controller('UserLoginCtrl', ['$scope', function($scope) {
+redditControllers.controller('UserLoginCtrl', ['$scope', 'AuthService', '$q', function($scope, AuthService, $q) {
 
-    $scope.user = 'test';
+    AuthService.init();
+
+    var _resolveUser = function() {
+        var userInfo = AuthService.getUserInfo();
+        $scope.hasUser = userInfo && userInfo.name;
+        $scope.user = $scope.hasUser ? userInfo : undefined;
+        $scope.login = { name : undefined, password : undefined };
+    }
+
+    _resolveUser();
+
+    $scope._login = function() {
+        AuthService.login($scope.login.name, $scope.login.password).then(_resolveUser);
+    };
+
+    $scope._logout = function() {
+        AuthService.logout().then(_resolveUser);
+    };
 
 }]);
