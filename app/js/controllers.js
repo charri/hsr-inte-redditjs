@@ -17,20 +17,7 @@ redditControllers.controller('NavigationCtrl', ['$scope', '$location', function(
 
 redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', '$rootScope', function($scope, Entry, Html, $rootScope) {
 
-
     $scope.entries = Entry.query();
-
-    $scope._voteUp = function(entry) {
-        entry.$up();
-    };
-
-    $scope._voteDown = function(entry) {
-        entry.$down();
-    };
-
-    $scope._canVote = function(entry) {
-        return $rootScope.hasUser; // TODO: check if user has already voted
-    };
 
     Html.setTitle('home');
 
