@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html ng-app="redditApp">
+<head>
+
+    <title>InTeTestat</title>
+    <base href="/app/">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="libs/bootstrap/css/material.min.css" rel="stylesheet" media="screen">
+    <link href="libs/bootstrap/css/ripples.min.css" rel="stylesheet" media="screen">
+    <link href="//fezvrasta.github.io/snackbarjs/dist/snackbar.min.css" rel="stylesheet" />
+    <link href="libs/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" media="screen">
+
+    <link href="client.css" rel="stylesheet">
+
+    <script src="libs/jquery-2.1.1.min.js"></script>
+    <script src="libs/bootstrap/js/material.min.js"></script>
+    <script src="libs/bootstrap/js/ripples.min.js"></script>
+
+    <script src="libs/angular-1.3.2/angular.min.js"></script>
+    <script src="libs/angular-1.3.2/angular-animate.min.js"></script>
+    <script src="libs/angular-1.3.2/angular-route.min.js"></script>
+    <script src="libs/angular-1.3.2/angular-resource.min.js"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="core.js"></script>
+    <script src="dataService.js"></script>
+    <script src="init.js"></script>
+
+    <!-- app -->
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/services.js"></script>
+
+</head>
+<body>
+    <div class="navbar navbar-default" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.xhtml">clone(Reddit)</a>
+
+            </div>
+            <div class="navbar-collapse collapse">
+
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+    <div class="container">
+        <div ng-view class="view-frame">
+            <p>Nothing here {{'yet' + '!'}}</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row footer">
+            <div class="col-md-12">
+                <br /><div class="noUi-origin noUi-background" style="position:static;"></div><br />
+
+                <p style="display:inline-block;">&copy; clone industries 2014</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="ui.js"></script>
+</body>
+</html>

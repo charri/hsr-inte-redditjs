@@ -1,0 +1,27 @@
+
+
+<div class="row" ng-repeat="entry in entries">
+    <div class="col-md-1">
+        <p class="text-center">
+            <br />
+            <span class="icon-material-keyboard-arrow-up"></span>
+            <br />
+            <span>{{entry.rating.value}}</span>
+            <br />
+            <span class="icon-material-keyboard-arrow-down"></span>
+        </p>
+    </div>
+
+    <div class="col-md-11">
+        <h4><a href="{{entry.url}}" target="_blank">{{entry.title}}</a></h4>
+
+        <p>submitted &nbsp; {{entry.createTime}} by <strong>{{entry.author}}</strong></p>
+        <p>
+            <a href="entries/{{entry.id}}">
+                <span class="icon-material-forum"></span> &nbsp;
+                {{entry.comments.length}} comment(s).
+            </a>
+        </p>
+
+    </div>
+</div>

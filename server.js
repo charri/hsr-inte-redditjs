@@ -62,10 +62,12 @@ function returnIndex(res, id, array) {
     return res.json(array[id]);
 }
 
+/*
 app.get('/', function(req, res) {
   res.type('text/plain'); 
   res.json(entries);
 });
+*/
  
 app.get('/login', function (req, res) {
     if (typeof (req.session.user_id) == "number") {
@@ -170,7 +172,12 @@ app.post('/logout', function (req, res) {
 	res.json(true);
 });
 
-app.use('/', express.static(__dirname + '/public/'));
+app.use('/app', express.static(__dirname + '/public/'));
+
+app.get('*', function(req, res, next) {
+    if (/^\/app\/(js|libs|partials)\//.test(req.url)) return next();
+    res.sendfile(__dirname + '/public/index.html');
+});
 
 //socket:
 io = io.listen(app.listen(process.env.PORT || 4730));
