@@ -1,0 +1,53 @@
+<div class="row">
+
+    <div class="col-md-1">
+        <br>
+        <div class="row">
+            <div class="text-center">
+                <span class="icon-material-keyboard-arrow-up"></span>
+            </div>
+            <div class="text-center">{{entry.rating.value}}</div>
+            <div  class="text-center">
+                <span class="icon-material-keyboard-arrow-down"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-11">
+        <h1>{{entry.title}}</h1>
+        <p>submitted {{entry.createTime | relativeDate}} by <strong>{{entry.author}}</strong></p>
+    </div>
+
+</div>
+<br><br>
+<script type="text/ng-template" id="comments.html">
+
+    <div class="row">
+        <div class="col-md-1">
+            <div class="row">
+                <div class="text-center">
+                    <span class="icon-material-keyboard-arrow-up"></span>
+                </div>
+                <div class="text-center">{{comment.rating.value}}</div>
+                <div  class="text-center">
+                    <span class="icon-material-keyboard-arrow-down"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-11">
+            <h4>{{comment.author}}, ({{comment.createTime | relativeDate}})</h4>
+            <p>{{comment.text}}</p>
+        </div>
+
+    </div>
+
+    <div class="row" ng-if="comment.comments.length > 0">
+        <div class="col-md-10 col-md-offset-2">
+            <div class="comments" ng-repeat="comment in comment.comments" ng-include="'comments.html'"></div>
+        </div>
+    </div>
+
+</script>
+
+<div class="comments" ng-repeat="comment in entry.comments" ng-include="'comments.html'"></div>

@@ -1,4 +1,4 @@
-var redditApp = angular.module('redditApp', ['ngRoute', 'redditControllers', 'redditServices']);
+var redditApp = angular.module('redditApp', ['ngRoute', 'relativeDate', 'redditControllers', 'redditServices']);
 
 redditApp.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
@@ -11,8 +11,12 @@ redditApp.config(['$routeProvider', '$locationProvider',
             when('/entries/:entryId', {
                 templateUrl: 'partials/entry-detail.html',
                 controller: 'EntryDetailCtrl'
-            }).
-            otherwise({
+            })
+            .when('/register', {
+                templateUrl : 'partials/register.html',
+                controller : 'UserCtrl'
+            })
+            .otherwise({
                 redirectTo: '/entries'
             });
 

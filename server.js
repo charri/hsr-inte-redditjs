@@ -4,6 +4,7 @@ var Link = require('./link.js');
 var Comment = require('./comment.js');
 var http = require('http');
 var io = require('socket.io');
+var fs = require('fs');
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -111,7 +112,7 @@ app.get('/login', function (req, res) {
 
  
  
- app.get('/entries', function (req, res) {
+ app.get('/entry', function (req, res) {
     res.json(entries);
 });
 
@@ -172,11 +173,23 @@ app.post('/logout', function (req, res) {
 	res.json(true);
 });
 
-app.use('/app', express.static(__dirname + '/public/'));
+app.use('/app', express.static(__dirname + '/app/'));
 
 app.get('*', function(req, res, next) {
-    if (/^\/app\/(js|libs|partials)\//.test(req.url)) return next();
-    res.sendfile(__dirname + '/public/index.html');
+
+    var file = __dirname +  req.path;
+
+    fs.exists(file, function(exists) {
+        if (exists) {
+            return next();
+        } else {
+            res.sendfile(__dirname + '/app/index.html');
+        }
+    });
+
+
+    //if (/^\/app\/(js|libs|partials)\//.test(req.url))
+
 });
 
 //socket:
