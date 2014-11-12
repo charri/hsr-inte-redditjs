@@ -15,7 +15,7 @@ redditControllers.controller('NavigationCtrl', ['$scope', '$location', function(
 
 }]);
 
-redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', '$rootScope', function($scope, Entry, Html, $rootScope) {
+redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', function($scope, Entry, Html) {
 
     $scope.entries = Entry.query();
 
