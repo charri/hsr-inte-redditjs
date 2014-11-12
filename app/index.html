@@ -51,7 +51,7 @@
                 <a class="navbar-brand" href="/app/entries">clone(Reddit)</a>
                 <ul class="nav navbar-nav" ng-controller="NavigationCtrl">
                     <li ng-class="menuClass('entries')"><a href="/app/entries">Home</a></li>
-                    <li ng-class="menuClass('submit')"><a href="/app/submit">Submit</a></li>
+                    <li ng-class="menuClass('submit')" ng-show="$root.hasUser"><a href="/app/submit">Submit</a></li>
                 </ul>
             </div>
             <div class="navbar-collapse collapse">

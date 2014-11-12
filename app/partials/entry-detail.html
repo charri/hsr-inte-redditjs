@@ -1,3 +1,4 @@
+<div class="well bs-component">
 <div class="row">
 
     <div class="col-md-1">
@@ -14,12 +15,13 @@
     </div>
 
     <div class="col-md-11">
-        <h1>{{entry.title}}</h1>
+        <h1>{{entry.title}} <small>({{entry.url}})</small></h1>
         <p>submitted {{entry.createTime | relativeDate}} by <strong>{{entry.author}}</strong></p>
     </div>
 
 </div>
-<br><br>
+</div>
+
 <script type="text/ng-template" id="comments.html">
 
     <div class="row">
@@ -36,7 +38,7 @@
         </div>
 
         <div class="col-md-11">
-            <h4>{{comment.author}}, ({{comment.createTime | relativeDate}})</h4>
+            <h4>{{comment.author}} <small>submitted {{comment.createTime | relativeDate}}</small></h4>
             <p>{{comment.text}}</p>
         </div>
 
@@ -49,5 +51,8 @@
     </div>
 
 </script>
+<br>
+<h3>Comments</h3>
 
 <div class="comments" ng-repeat="comment in entry.comments" ng-include="'comments.html'"></div>
+<br>
