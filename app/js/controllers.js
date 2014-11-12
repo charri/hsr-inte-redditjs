@@ -6,6 +6,15 @@ redditControllers.controller('HtmlHeadCtrl', ['$scope', 'Html', function($scope,
 
 }]);
 
+redditControllers.controller('NavigationCtrl', ['$scope', '$location', function($scope, $location) {
+
+    $scope.menuClass = function(page) {
+        var current = $location.path().substring(1);
+        console.log(current);
+        return page === current ? "active" : "";
+    };
+
+}]);
 
 redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', function($scope, Entry, Html) {
     $scope.entries = Entry.query();
@@ -24,7 +33,7 @@ redditControllers.controller('EntryDetailCtrl', ['$scope', '$routeParams', 'Entr
 
 }]);
 
-redditControllers.controller('UserCtrl', ['$scope', function($scope) {
+redditControllers.controller('UserLoginCtrl', ['$scope', function($scope) {
 
     $scope.user = 'test';
 

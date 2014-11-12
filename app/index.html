@@ -48,14 +48,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.xhtml">clone(Reddit)</a>
-                <ul class="nav navbar-nav">
-                    <li><a href="/app/entries">Home</a></li>
-                    <li><a href="/app/submit">Submit</a></li>
+                <a class="navbar-brand" href="/app/entries">clone(Reddit)</a>
+                <ul class="nav navbar-nav" ng-controller="NavigationCtrl">
+                    <li ng-class="menuClass('entries')"><a href="/app/entries">Home</a></li>
+                    <li ng-class="menuClass('submit')"><a href="/app/submit">Submit</a></li>
                 </ul>
             </div>
             <div class="navbar-collapse collapse">
-                <div ng-controller="UserCtrl">
+                <div ng-controller="UserLoginCtrl">
                     {{user}}
                 </div>
             </div><!--/.nav-collapse -->
