@@ -1,1 +1,14 @@
-﻿
+﻿.btn-transparent {
+    background-color:transparent;
+    display:inline-block;
+    border:none;
+    color:#428bca;
+}
+
+.btn-transparent:hover {
+    color:#2a6496;
+}
+
+.btn-transparent:disabled {
+    color:#ccc;
+}

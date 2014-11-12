@@ -13,9 +13,13 @@ redditApp.config(['$routeProvider', '$locationProvider',
                 templateUrl: 'partials/entry-detail.html',
                 controller: 'EntryDetailCtrl'
             })
+            .when('/submit', {
+                templateUrl : 'partials/submit.html',
+                controller : 'SubmitCtrl'
+            })
             .when('/register', {
                 templateUrl : 'partials/register.html',
-                controller : 'UserCtrl'
+                controller : 'RegisterCtrl'
             })
             .otherwise({
                 redirectTo: '/entries'

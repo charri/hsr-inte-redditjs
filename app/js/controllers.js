@@ -21,17 +21,11 @@ redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', '$root
     $scope.entries = Entry.query();
 
     $scope._voteUp = function(entry) {
-        console.log(['voteUp', entry]);
-        Entry.up({ id : entry.id }, function(data) {
-            console.log(['returned data ', data])
-        })
+        entry.$up();
     };
 
     $scope._voteDown = function(entry) {
-        console.log(['voteDown', entry]);
-        Entry.down({ id : entry.id }, function(data) {
-            console.log(['returned data ', data])
-        })
+        entry.$down();
     };
 
     $scope._canVote = function(entry) {
