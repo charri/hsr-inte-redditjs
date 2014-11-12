@@ -55,7 +55,7 @@
                 </ul>
             </div>
             <div class="navbar-collapse collapse">
-                <div ng-controller="UserLoginCtrl" ng-cloak class="ng-cloak">
+                <div ng-controller="UserLoginCtrl" ng-cloak class="ng-cloak" ng-show="$root.initAuth">
                     <div ng-show="$root.hasUser">
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="#">Hello <strong>{{user.name}}</strong></a></li>

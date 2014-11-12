@@ -72,10 +72,9 @@ app.get('/', function(req, res) {
  
 app.get('/login', function (req, res) {
     if (typeof (req.session.user_id) == "number") {
-        res.json(users[req.session.user_id].name);
-        return;
+        return res.json(users[req.session.user_id].name);
     }
-    res.json("");
+    return res.send(403, "Please login");
 });
  
  app.post('/login', function (req, res) {

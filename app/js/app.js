@@ -1,4 +1,4 @@
-var redditApp = angular.module('redditApp', ['ngRoute', 'relativeDate', 'redditControllers', 'redditServices']);
+var redditApp = angular.module('redditApp', ['ngRoute', 'ngAnimate', 'relativeDate', 'redditControllers', 'redditServices']);
 
 redditApp.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
@@ -28,6 +28,6 @@ redditApp.config(['$routeProvider', '$locationProvider',
     }
 ]);
 
-redditApp.run(['AuthService', function(AuthService) {
-    AuthService.init();
+redditApp.run(['AuthService', '$rootScope', function(AuthService, $rootScope) {
+
 }]);

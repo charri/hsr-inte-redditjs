@@ -19,14 +19,20 @@ redditServices.factory('Entry', ['$resource', function($resource) {
 redditServices.factory('User', ['$resource', function($resource) {
     return $resource('/entry/:id', { id : '@id' }, {
         query: {method:'GET', isArray:true , url : '/users'},
-        save: { method : 'POST', url : '/register' }
+        save: { method : 'POST', url : '/register' },
+        restore : {method:'GET', url : '/login' }
     });
 }]);
 
-redditServices.factory("AuthService", ['$http', '$q', '$window',  function($http, $q, $window) {
-    var userInfo = false;
+redditServices.service("AuthService", ['$http', '$q', '$window', 'User',  function($http, $q, $window, User) {
 
-    function login(userName, password) {
+    var self = this;
+
+    this.userInfo = false;
+    this.hasUser = false;
+    this.initComplete = false;
+
+    this.login = function(userName, password) {
         var deferred = $q.defer();
 
         $http.post("/login", {
@@ -37,9 +43,8 @@ redditServices.factory("AuthService", ['$http', '$q', '$window',  function($http
                 deferred.reject(result.data);
                 return;
             }
-            userInfo = { name : userName };
-            $window.sessionStorage["userInfo"] = JSON.stringify(userInfo);
-            deferred.resolve(userInfo);
+            setUser(userName);
+            deferred.resolve(self.userInfo);
         }, function(error) {
             deferred.reject(error);
         });
@@ -47,14 +52,26 @@ redditServices.factory("AuthService", ['$http', '$q', '$window',  function($http
         return deferred.promise;
     };
 
-    function logout() {
+    function setUser(userName) {
+        if(userName == '') userName = undefined;
+
+        if(userName) {
+            self.userInfo = { name : userName };
+            self.hasUser = true;
+        }
+        else {
+            self.hasUser = false;
+            self.userInfo = undefined;
+        }
+    }
+
+    this.logout = function() {
         var deferred = $q.defer();
 
         $http
         .post("/logout")
         .then(function(result) {
-            $window.sessionStorage["userInfo"] = null;
-            userInfo = null;
+            setUser();
             deferred.resolve(result);
         }, function(error) {
             deferred.reject(error);
@@ -63,27 +80,13 @@ redditServices.factory("AuthService", ['$http', '$q', '$window',  function($http
         return deferred.promise;
     };
 
-    function getUserInfo() {
-        return userInfo;
-    };
+    User.restore().$promise.then(function(user) {
+        setUser(user[0]); // as accessing promise
+        self.initComplete = true;
+    }, function() {
+        self.initComplete = true;
+    });
 
-    function hasUser() {
-        return userInfo && userInfo.name;
-    }
-
-    function init() {
-        if ($window.sessionStorage["userInfo"]) {
-            userInfo = JSON.parse($window.sessionStorage["userInfo"]);
-        }
-    };
-
-    return {
-        init : init,
-        login: login,
-        logout : logout,
-        getUserInfo : getUserInfo,
-        hasUser : hasUser
-    };
 }]);
 
 redditServices.factory('Socket', function ($rootScope) {

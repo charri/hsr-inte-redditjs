@@ -1,7 +1,7 @@
 var redditControllers = angular.module('redditControllers', []);
 
 redditControllers.controller('HtmlHeadCtrl', ['$scope', 'Html', function($scope, Html) {
-    $scope.title = Html.title;
+
     $scope.$watch(function(){ return Html.title}, function(newVal) { $scope.title = newVal; });
 
 }]);
@@ -37,8 +37,8 @@ redditControllers.controller('SubmitCtrl', ['$scope', 'Entry', 'Html', '$locatio
 
 }]);
 
-redditControllers.controller('RegisterCtrl', ['$scope', 'User', 'Html', '$location', 'AuthService', '$rootScope',
-    function($scope, User, Html, $location, AuthService, $rootScope) {
+redditControllers.controller('RegisterCtrl', ['$scope', 'User', 'Html', '$location', 'AuthService',
+    function($scope, User, Html, $location, AuthService) {
 
     $scope.user = new User();
 
@@ -49,8 +49,7 @@ redditControllers.controller('RegisterCtrl', ['$scope', 'User', 'Html', '$locati
             if(!result) return;
 
             AuthService.login($scope.user.name, $scope.user.password).then(function() {
-                $rootScope.hasUser = AuthService.hasUser();
-                $location.path('/entries/');
+                $location.path('/entries');
             });
         });
     };
@@ -70,22 +69,17 @@ redditControllers.controller('EntryDetailCtrl', ['$scope', '$routeParams', 'Entr
 redditControllers.controller('UserLoginCtrl', ['$scope', 'AuthService', '$rootScope', function($scope, AuthService, $rootScope) {
 
     $rootScope.$watch('hasUser', function() {
-        $scope.user = $scope.hasUser ? AuthService.getUserInfo() : undefined;
+        $scope.user = AuthService.userInfo;
         $scope.login = { name : undefined, password : undefined };
     });
 
-    var _resolveUser = function() {
-        $rootScope.hasUser = AuthService.hasUser();
-    };
-
-    _resolveUser();
+    $scope.$watch(function(){ return AuthService.hasUser; }, function(newVal) { $rootScope.hasUser = newVal; });
+    $scope.$watch(function(){ return AuthService.initComplete; }, function(newVal) { $rootScope.initAuth = newVal; });
 
     $scope._login = function() {
-        AuthService.login($scope.login.name, $scope.login.password).then(_resolveUser);
+        AuthService.login($scope.login.name, $scope.login.password);
     };
 
-    $scope._logout = function() {
-        AuthService.logout().then(_resolveUser);
-    };
+    $scope._logout = AuthService.logout;
 
 }]);
