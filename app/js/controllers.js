@@ -23,6 +23,20 @@ redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', functi
 
 }]);
 
+redditControllers.controller('SubmitCtrl', ['$scope', 'Entry', 'Html', '$location', function($scope, Entry, Html, $location) {
+
+    $scope.entry = new Entry();
+
+    Html.setTitle('submit');
+
+    $scope.$save = function() {
+        $scope.entry.$save(function(entry) {
+            $location.path('/entries/' + entry.id);
+        });
+    };
+
+}]);
+
 redditControllers.controller('EntryDetailCtrl', ['$scope', '$routeParams', 'Entry', 'Html', function($scope, $routeParams, Entry, Html) {
 
     $scope.entry = Entry.get({ id : $routeParams.entryId}, function(entry) {
@@ -30,7 +44,6 @@ redditControllers.controller('EntryDetailCtrl', ['$scope', '$routeParams', 'Entr
         Html.setTitle(entry.title);
 
     });
-
 
 }]);
 
