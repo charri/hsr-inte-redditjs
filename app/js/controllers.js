@@ -55,6 +55,7 @@ redditControllers.controller('CommentAddCtrl', ['$scope', 'Comment', function($s
             $scope.entry.comments.push($scope.addComment);
             $scope.entry.showAddComment = false;
         }
+        $scope.addComment = new Comment();
     };
 
 }]);
