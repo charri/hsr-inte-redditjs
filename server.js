@@ -122,6 +122,7 @@ app.post('/entry', function(req, res) {
  	entries.push(newLink);
  	res.json(newLink);
  	io.sockets.emit('message', { action: "AddLink" });
+    io.sockets.emit('add:entry', newLink.id);
 });
 
 app.get('/entry/:id', function(req, res) {
@@ -129,15 +130,17 @@ app.get('/entry/:id', function(req, res) {
 });
 
 app.post('/entry/:id/up', checkAuth, function (req, res) {
-    entries[req.params.id].rating._up(req.session.user_id);
+    var rating = entries[req.params.id].rating._up(req.session.user_id);
     res.json(entries[req.params.id]);
     io.sockets.emit('message', { action: "Rated" });
+    io.sockets.emit('up:entry:' + req.params.id, rating);
 });
 
 app.post('/entry/:id/down', checkAuth, function (req, res) {
-    entries[req.params.id].rating._down(req.session.user_id);
+    var rating = entries[req.params.id].rating._down(req.session.user_id);
     res.json(entries[req.params.id]);
     io.sockets.emit('message', { action: "Rated" });
+    io.sockets.emit('down:entry:' + req.params.id, rating);
 });
 
 app.post('/entry/:id/comment', checkAuth, function (req, res) {
@@ -148,6 +151,7 @@ app.post('/entry/:id/comment', checkAuth, function (req, res) {
     entry.comments.push(newComment);
     res.json(newComment);
     io.sockets.emit('message', { action: "AddComment" });
+    io.sockets.emit('add:comment:entry' + req.params.id, newComment);
 });
 
 app.post('/comment/:id', checkAuth, function (req, res) {
@@ -158,18 +162,21 @@ app.post('/comment/:id', checkAuth, function (req, res) {
     comment.comments.push(newComment);
     res.json(newComment);
     io.sockets.emit('message', { action: "AddComment" });
+    io.sockets.emit('add:comment:comment' + req.params.id, newComment);
 });
 
 app.post('/comment/:id/up', checkAuth, function (req, res) {
     comments[req.params.id].rating._up(req.session.user_id);
     res.json(comments[req.params.id]);
     io.sockets.emit('message', { action: "Rated" });
+    io.sockets.emit('up:comment:' + req.params.id, comments[req.params.id]);
 });
 
 app.post('/comment/:id/down', checkAuth, function (req, res) {
     comments[req.params.id].rating._down(req.session.user_id);
     res.json(comments[req.params.id]);
     io.sockets.emit('message', { action: "Rated" });
+    io.sockets.emit('down:comment:' + req.params.id, comments[req.params.id]);
 });
 
 app.post('/logout', function (req, res) {

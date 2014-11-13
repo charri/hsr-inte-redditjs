@@ -15,11 +15,34 @@ redditControllers.controller('NavigationCtrl', ['$scope', '$location', function(
 
 }]);
 
-redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', function($scope, Entry, Html) {
+redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', 'Socket', function($scope, Entry, Html, Socket) {
 
-    $scope.entries = Entry.query();
+    var _query = function() {
+        $scope.entries = Entry.query();
+    };
+
+    _query();
 
     Html.setTitle('home');
+
+    Socket.on('message', function(msg) {
+        console.log(msg);
+    });
+
+    Socket.on('add:entry', function(id) {
+        $scope.entries.push(Entry.get({ id : id}));
+    });
+
+}]);
+
+redditControllers.controller('EntryListenerCtrl', ['$scope', 'Entry', 'Html', 'Socket', function($scope, Entry, Html, Socket) {
+
+    var _update = function(rating) {
+        $scope.entry.rating.value = rating;
+    };
+
+    Socket.on('up:entry:'+ $scope.entry.id, _update);
+    Socket.on('down:entry:'+ $scope.entry.id, _update);
 
 }]);
 
@@ -93,7 +116,12 @@ redditControllers.controller('RegisterCtrl', ['$scope', 'User', 'Html', '$locati
 
 }]);
 
-redditControllers.controller('EntryDetailCtrl', ['$scope', '$routeParams', 'Entry', 'Html', function($scope, $routeParams, Entry, Html) {
+redditControllers.controller('EntryDetailCtrl', ['$scope', '$routeParams', 'Entry', 'Html', 'Socket',
+    function($scope, $routeParams, Entry, Html, Socket) {
+
+    Socket.on('message', function(msg) {
+        console.log(msg);
+    });
 
     $scope.entry = Entry.get({ id : $routeParams.entryId}, function(entry) {
 
