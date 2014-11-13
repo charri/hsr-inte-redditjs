@@ -38,8 +38,8 @@
         </div>
 
         <div class="col-md-11">
-            <h4>{{comment.author}} <small>submitted {{comment.createTime | relativeDate}}</small></h4>
             <p>{{comment.text}}</p>
+            <h4><small>submitted {{comment.createTime | relativeDate}} by <strong>{{comment.author}}</strong></small></h4>
         </div>
 
     </div>
