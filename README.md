@@ -33,3 +33,9 @@ Dependencies
 - angular-relative-date https://github.com/wildlyinaccurate/angular-relative-date
 - jquery https://www.jquery.com
 - snackbarjs http://fezvrasta.github.io/snackbarjs/
+
+
+Running
+-------
+1. Execute ./server.sh
+2. Open browser: http://localhost:4730/app/entries
