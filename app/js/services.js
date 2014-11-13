@@ -24,6 +24,14 @@ redditServices.factory('User', ['$resource', function($resource) {
     });
 }]);
 
+redditServices.factory('Comment', ['$resource', function($resource) {
+    return $resource('/comment/:id', { id : '@id' }, {
+        save : { method : 'POST', url : '/entry/:entryId/comment' },
+        up: { method : 'POST', url : '/comment/:id/up' },
+        down: { method : 'POST', url : '/comment/:id/down' }
+    });
+}]);
+
 redditServices.service("AuthService", ['$http', '$q', '$window', 'User',  function($http, $q, $window, User) {
 
     var self = this;

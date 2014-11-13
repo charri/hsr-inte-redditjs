@@ -23,6 +23,22 @@ redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', functi
 
 }]);
 
+redditControllers.controller('CommentListCtrl', ['$scope', 'Comment', function($scope, Comment) {
+    // $scope.comment inherited from parent controller
+    // $scope.entry inherited from parent controller
+
+    $scope.$up = function() {
+        // using static method as $scope.comment is not wrapped in Comment
+        $scope.comment = Comment.up({ }, $scope.comment);
+
+    };
+
+    $scope.$down = function() {
+        $scope.comment = Comment.down({ }, $scope.comment);
+    };
+
+}]);
+
 redditControllers.controller('SubmitCtrl', ['$scope', 'Entry', 'Html', '$location', function($scope, Entry, Html, $location) {
 
     $scope.entry = new Entry();
