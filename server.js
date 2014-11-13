@@ -32,13 +32,14 @@ function checkAuth(req, res, next) {
 var entries = [];
 var users = [];
 var comments = [];
+var commentMap = [];
 
 //sample data
 entries.push(new Link(entries.length, "Title", "Author", "http://www.google.ch"));
 var comment = new Comment(0, "TestComment", "Author");
 comments.push(comment);
 entries[0].comments.push(comment);
-
+commentMap[comment.id] = entries[0].id;
 //default user
 users.push(new User(users.length, "a", "a") );
   
@@ -93,13 +94,11 @@ app.get('/login', function (req, res) {
      var post = req.body;
      
      if (typeof(post.name) != "string" || typeof(post.password) != "string") {
-         res.json(false);
-         return;
+         return res.send(400, 'Name and password must be of type string.');
      }
      
      if (findUser(post.name)) {
-         res.json(false);
-         return;
+         return res.send(400, 'User exists.');
      }
      var user = new User(users.length, post.name, post.password);
      users.push(user);
@@ -150,6 +149,8 @@ app.post('/entry/:id/comment', checkAuth, function (req, res) {
     var entry = entries[req.params.id];
     entry.comments.push(newComment);
     res.json(newComment);
+
+    commentMap[newComment.id] = entry.id;
     io.sockets.emit('message', { action: "AddComment" });
     io.sockets.emit('add:comment:entry:' + req.params.id, newComment);
 });
@@ -160,8 +161,13 @@ app.post('/comment/:id', checkAuth, function (req, res) {
 
     var comment = comments[req.params.id];
     comment.comments.push(newComment);
+
+    var entry = entries[commentMap[req.params.id]];
+    commentMap[newComment.id] = entry.id;
+
     res.json(newComment);
     io.sockets.emit('message', { action: "AddComment" });
+    io.sockets.emit('add:comment:sub:entry:' + entry.id, newComment);
     io.sockets.emit('add:comment:comment:' + req.params.id, newComment);
 });
 

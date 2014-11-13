@@ -9,7 +9,7 @@
     <link href="libs/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="libs/bootstrap/css/material.min.css" rel="stylesheet" media="screen">
     <link href="libs/bootstrap/css/ripples.min.css" rel="stylesheet" media="screen">
-    <link href="//fezvrasta.github.io/snackbarjs/dist/snackbar.min.css" rel="stylesheet" />
+    <link href="libs/bootstrap/css/snackbar.min.css" rel="stylesheet" media="screen">
     <link href="libs/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" media="screen">
 
     <link href="client.css" rel="stylesheet">
@@ -17,6 +17,7 @@
     <script src="libs/jquery-2.1.1.min.js"></script>
     <script src="libs/bootstrap/js/material.min.js"></script>
     <script src="libs/bootstrap/js/ripples.min.js"></script>
+    <script src="libs/bootstrap/js/snackbar.min.js"></script>
 
     <script src="libs/angular-1.3.2/angular.min.js"></script>
     <script src="libs/angular-1.3.2/angular-animate.min.js"></script>
@@ -56,7 +57,7 @@
                 </ul>
             </div>
             <div class="navbar-collapse collapse">
-                <div ng-controller="UserLoginCtrl" ng-cloak class="ng-cloak" ng-show="$root.initAuth">
+                <div ng-controller="UserLoginBarCtrl" ng-cloak class="ng-cloak" ng-show="$root.initAuth && show">
                     <div ng-show="$root.hasUser">
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="#">Hello <strong>{{user.name}}</strong></a></li>
@@ -65,15 +66,15 @@
                     </div>
 
                     <div ng-hide="$root.hasUser">
-                        <form class="navbar-form navbar-right" role="form" style="margin-top:2px;margin-bottom: 0px;">
+                        <form class="navbar-form navbar-right" name="form" role="form" style="margin-top:2px;margin-bottom: 0px;" novalidate>
                             <div class="form-group">
-                                <input type="text" class="form-control" ng-model="login.name" placeholder="username" />
+                                <input type="text" class="form-control" ng-model="login.name" placeholder="username" required>
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" ng-model="login.password" placeholder="******" />
+                                <input type="password" class="form-control" ng-model="login.password" placeholder="******" required>
                             </div>
                             <div class="form-group">
-                                &nbsp;&nbsp;<button  class="btn btn-success withripple" ng-click="_login()">Login</button>
+                                &nbsp;&nbsp;<button  class="btn btn-success withripple" ng-click="_login()" ng-disabled="form.$invalid">Login</button>
                             </div>
                             <div class="form-group">
                                 <a class="btn btn-info withripple" href="/app/register">Register</a>

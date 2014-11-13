@@ -21,6 +21,10 @@ redditApp.config(['$routeProvider', '$locationProvider',
                 templateUrl : 'partials/register.html',
                 controller : 'RegisterCtrl'
             })
+            .when('/login', {
+                templateUrl : 'partials/login.html',
+                controller : 'UserLoginCtrl'
+            })
             .otherwise({
                 redirectTo: '/entries'
             });
