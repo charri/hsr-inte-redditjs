@@ -4,7 +4,7 @@ redditFilters.filter('domainName', [function() {
     return function(input) {
         var url = $.trim(input);
         var match = url.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i, "");
-        return match[1].replace('www.', '');
+        return match ? match[1].replace('www.', '') : '';
     };
 }]);
 
