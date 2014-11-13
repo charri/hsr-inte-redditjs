@@ -1,7 +1,7 @@
 
 
 <div class="row" ng-repeat="entry in entries | orderBy:'rating.value':true" ng-controller="EntryListListenerCtrl">
-    <div class="col-md-1">
+    <div class="col-xs-1">
         <br>
         <div class="row">
             <div class="text-center">
@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div class="col-md-11">
+    <div class="col-xs-11">
         <h4><a href="{{entry.url}}" target="_blank">{{entry.title}}  <small>({{entry.url | domainName}})</small></a></h4>
 
         <p>submitted {{entry.createTime | relativeDate}} by <strong>{{entry.author}}</strong></p>
