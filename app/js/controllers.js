@@ -15,38 +15,70 @@ redditControllers.controller('NavigationCtrl', ['$scope', '$location', function(
 
 }]);
 
-redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', 'Socket', function($scope, Entry, Html, Socket) {
+redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', 'Socket', 'Snackbar', 'AuthService',
+    function($scope, Entry, Html, Socket, Snackbar, AuthService) {
 
     $scope.entries = Entry.query();
 
     Html.setTitle('home');
 
     Socket.on('add:entry', function(id) {
-        $scope.entries.push(Entry.get({ id : id}));
+
+        $scope.entries.push(Entry.get({ id : id}, function(entry) {
+
+            if(AuthService.hasUser
+                && entry.author != AuthService.userInfo.name) {
+                Snackbar.snack('A new entry has just been added! Check it out <a href="entries/' + entry.id + '">here</a>');
+            }
+
+        }));
+
+
     });
 
 }]);
 
-redditControllers.controller('EntryListListenerCtrl', ['$scope','Socket', function($scope, Socket) {
+redditControllers.controller('EntryListListenerCtrl', ['$scope','Socket', 'AuthService', 'Snackbar',
+    function($scope, Socket, AuthService, Snackbar) {
 
-    $on.entryVote(Socket, $scope).entryComment(Socket, $scope);
+    $on.entryVote(Socket, $scope, AuthService, Snackbar).entryComment(Socket, $scope, AuthService, Snackbar);
 
     Socket.on('add:comment:sub:entry:' + $scope.entry.id, function(comment) {
         $scope.entry.comments.push(comment); // adding sub comment to entry doesn't matter as they are not displayed
+
+        if(AuthService.hasUser
+            && $scope.entry.author == AuthService.userInfo.name
+            && comment.author != AuthService.userInfo.name
+            ) {
+            Snackbar.snack('Someone else just commented on your entry! Check it out <a href="entries/' + $scope.entry.id + '">here</a>');
+        }
     });
 
 }]);
 
 var $on = {
-    entryVote : function(Socket, $scope) {
+    entryVote : function(Socket, $scope, AuthService, Snackbar) {
         Socket.on(['up:entry:'+ $scope.entry.id,'down:entry:'+ $scope.entry.id], function(rating) {
             $scope.entry.rating.value = rating;
+
+            if(!AuthService || !Snackbar) return;
+
+            if(AuthService.hasUser && $scope.entry.author == AuthService.userInfo.name) {
+                Snackbar.snack('Your entry was just voted on! Check it out <a href="entries/' + $scope.entry.id + '">here</a>');
+            }
         });
         return $on;
     },
-    entryComment : function(Socket, $scope) {
+    entryComment : function(Socket, $scope, AuthService, Snackbar) {
         Socket.on('add:comment:entry:' + $scope.entry.id, function(comment) {
             $scope.entry.comments.push(comment);
+
+            if(AuthService.hasUser
+                && $scope.entry.author == AuthService.userInfo.name
+                && comment.author != AuthService.userInfo.name
+                ) {
+                Snackbar.snack('Someone else just commented on your entry! Check it out <a href="entries/' + $scope.entry.id + '">here</a>');
+            }
         });
 
         return $on;
@@ -61,7 +93,8 @@ redditControllers.controller('EntryDetailListenerCtrl', ['$scope', 'Entry', 'Htm
 
 }]);
 
-redditControllers.controller('CommentListCtrl', ['$scope', 'Comment', 'Socket', '$q', function($scope, Comment, Socket, $q) {
+redditControllers.controller('CommentListCtrl', ['$scope', 'Comment', 'Socket', '$q', 'AuthService', 'Snackbar',
+    function($scope, Comment, Socket, $q, AuthService, Snackbar) {
     // $scope.comment inherited from parent controller
     // $scope.entry inherited from parent controller
     // using static method as $scope.comment is not wrapped in Comment
@@ -76,6 +109,12 @@ redditControllers.controller('CommentListCtrl', ['$scope', 'Comment', 'Socket', 
     $q.when($scope.comment).then(function(comment) {
         Socket.on(['up:comment:'+ comment.id,'down:comment:'+ comment.id], function(rating) {
             comment.rating.value = rating;
+
+            if(!AuthService || !Snackbar) return;
+
+            if(AuthService.hasUser && comment.author == AuthService.userInfo.name) {
+                Snackbar.snack('Your comment was just voted on!');
+            }
         });
 
         Socket.on('add:comment:comment:' + comment.id, function(newComment) {
@@ -94,11 +133,9 @@ redditControllers.controller('CommentAddCtrl', ['$scope', 'Comment', function($s
     $scope.$save = function() {
         if($scope.comment) {
             $scope.addComment.$save({ parentId : $scope.comment.id, type : 'comment', action : '' });
-            //$scope.comment.comments.push($scope.addComment);
             $scope.comment.showAddComment = false;
         } else {
             $scope.addComment.$save({ parentId : $scope.entry.id, type : 'entry', action : 'comment' });
-            //$scope.entry.comments.push($scope.addComment);
             $scope.entry.showAddComment = false;
         }
         $scope.addComment = new Comment();
@@ -140,8 +177,8 @@ redditControllers.controller('RegisterCtrl', ['$scope', 'User', 'Html', '$locati
 
 }]);
 
-redditControllers.controller('EntryDetailCtrl', ['$scope', '$routeParams', 'Entry', 'Html', 'Socket',
-    function($scope, $routeParams, Entry, Html, Socket) {
+redditControllers.controller('EntryDetailCtrl', ['$scope', '$routeParams', 'Entry', 'Html', 'Socket', 'AuthService',
+    function($scope, $routeParams, Entry, Html, Socket, AuthService) {
 
     Socket.on('message', function(msg) {
         console.log(msg);
@@ -151,6 +188,8 @@ redditControllers.controller('EntryDetailCtrl', ['$scope', '$routeParams', 'Entr
 
         Html.setTitle(entry.title);
         $on.entryVote(Socket, $scope).entryComment(Socket, $scope);
+
+
 
     });
 

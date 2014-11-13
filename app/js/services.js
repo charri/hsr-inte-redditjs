@@ -1,6 +1,6 @@
 var redditServices = angular.module('redditServices', ['ngResource']);
 
-
+redditServices.constant("jQuery", window.$);
 
 redditServices.service('Html', [function() {
     this.title = 'clone(Reddit)';
@@ -30,6 +30,12 @@ redditServices.factory('Comment', ['$resource', function($resource) {
         up: { method : 'POST', url : '/comment/:id/up' },
         down: { method : 'POST', url : '/comment/:id/down' }
     });
+}]);
+
+redditServices.service('Snackbar', [ 'jQuery', function(jQuery) {
+    this.snack = function(content) {
+        jQuery.snackbar({content: content});
+    };
 }]);
 
 redditServices.service("AuthService", ['$http', '$q', '$window', 'User',  function($http, $q, $window, User) {
