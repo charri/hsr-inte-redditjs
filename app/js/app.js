@@ -1,4 +1,4 @@
-var redditApp = angular.module('redditApp', ['ngRoute', 'ngAnimate', 'relativeDate', 'redditControllers', 'redditServices']);
+var redditApp = angular.module('redditApp', ['ngRoute', 'ngAnimate', 'relativeDate', 'redditControllers', 'redditServices', 'redditFilters']);
 
 redditApp.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {

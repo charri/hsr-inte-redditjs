@@ -15,13 +15,13 @@
     </div>
 
     <div class="col-md-11">
-        <h4><a href="{{entry.url}}" target="_blank">{{entry.title}}</a></h4>
+        <h4><a href="{{entry.url}}" target="_blank">{{entry.title}}  <small>({{entry.url | domainName}})</small></a></h4>
 
         <p>submitted {{entry.createTime | relativeDate}} by <strong>{{entry.author}}</strong></p>
         <p>
             <a href="entries/{{entry.id}}">
                 <span class="icon-material-forum"></span> &nbsp;
-                {{entry.comments.length}} comment(s).
+                {{entry.comments | recursiveCommentCount}} comment(s).
             </a>
         </p>
 
