@@ -59,7 +59,7 @@
                     <div ng-show="$root.hasUser">
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="#">Hello <strong>{{user.name}}</strong></a></li>
-                            <li>&nbsp;&nbsp;<button  class="btn btn-success" ng-click="_logout()">Logout</button></li>
+                            <li>&nbsp;&nbsp;<button  class="btn btn-success withripple" ng-click="_logout()">Logout</button></li>
                         </ul>
                     </div>
 
@@ -72,7 +72,7 @@
                                 <input type="password" class="form-control" ng-model="login.password" placeholder="******" />
                             </div>
                             <div class="form-group">
-                                &nbsp;&nbsp;<button  class="btn btn-success" ng-click="_login()">Login</button>
+                                &nbsp;&nbsp;<button  class="btn btn-success withripple" ng-click="_login()">Login</button>
                             </div>
                             <div class="form-group">
                                 <a class="btn btn-info withripple" href="/app/register">Register</a>

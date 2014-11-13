@@ -39,6 +39,26 @@ redditControllers.controller('CommentListCtrl', ['$scope', 'Comment', function($
 
 }]);
 
+redditControllers.controller('CommentAddCtrl', ['$scope', 'Comment', function($scope, Comment) {
+    // $scope.comment inherited from parent controller
+    // $scope.entry inherited from parent controller
+
+    $scope.addComment = new Comment();
+
+    $scope.$save = function() {
+        if($scope.comment) {
+            $scope.addComment.$save({ parentId : $scope.comment.id, type : 'comment', action : '' });
+            $scope.comment.comments.push($scope.addComment);
+            $scope.comment.showAddComment = false;
+        } else {
+            $scope.addComment.$save({ parentId : $scope.entry.id, type : 'entry', action : 'comment' });
+            $scope.entry.comments.push($scope.addComment);
+            $scope.entry.showAddComment = false;
+        }
+    };
+
+}]);
+
 redditControllers.controller('SubmitCtrl', ['$scope', 'Entry', 'Html', '$location', function($scope, Entry, Html, $location) {
 
     $scope.entry = new Entry();

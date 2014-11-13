@@ -26,7 +26,7 @@ redditServices.factory('User', ['$resource', function($resource) {
 
 redditServices.factory('Comment', ['$resource', function($resource) {
     return $resource('/comment/:id', { id : '@id' }, {
-        save : { method : 'POST', url : '/entry/:entryId/comment' },
+        save : { method : 'POST', url : '/:type/:parentId/:action' },
         up: { method : 'POST', url : '/comment/:id/up' },
         down: { method : 'POST', url : '/comment/:id/down' }
     });

@@ -150,7 +150,7 @@ app.post('/entry/:id/comment', checkAuth, function (req, res) {
     io.sockets.emit('message', { action: "AddComment" });
 });
 
-app.post('/comment/:id/', checkAuth, function (req, res) {
+app.post('/comment/:id', checkAuth, function (req, res) {
     var newComment = new Comment(comments.length, req.body.text, users[req.session.user_id].name);
     comments.push(newComment);
 
