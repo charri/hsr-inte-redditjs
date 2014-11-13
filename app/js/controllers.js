@@ -17,17 +17,9 @@ redditControllers.controller('NavigationCtrl', ['$scope', '$location', function(
 
 redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', 'Socket', function($scope, Entry, Html, Socket) {
 
-    var _query = function() {
-        $scope.entries = Entry.query();
-    };
-
-    _query();
+    $scope.entries = Entry.query();
 
     Html.setTitle('home');
-
-    Socket.on('message', function(msg) {
-        console.log(msg);
-    });
 
     Socket.on('add:entry', function(id) {
         $scope.entries.push(Entry.get({ id : id}));
@@ -35,30 +27,56 @@ redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', 'Socke
 
 }]);
 
-redditControllers.controller('EntryListenerCtrl', ['$scope', 'Entry', 'Html', 'Socket', function($scope, Entry, Html, Socket) {
+redditControllers.controller('EntryListListenerCtrl', ['$scope','Socket', function($scope, Socket) {
 
-    var _update = function(rating) {
-        $scope.entry.rating.value = rating;
-    };
-
-    Socket.on('up:entry:'+ $scope.entry.id, _update);
-    Socket.on('down:entry:'+ $scope.entry.id, _update);
+    $on.entryVote(Socket, $scope).entryComment(Socket, $scope);
 
 }]);
 
-redditControllers.controller('CommentListCtrl', ['$scope', 'Comment', function($scope, Comment) {
+var $on = {
+    entryVote : function(Socket, $scope) {
+        Socket.on(['up:entry:'+ $scope.entry.id,'down:entry:'+ $scope.entry.id], function(rating) {
+            $scope.entry.rating.value = rating;
+        });
+        return $on;
+    },
+    entryComment : function(Socket, $scope) {
+        Socket.on('add:comment:entry:' + $scope.entry.id, function(comment) {
+            $scope.entry.comments.push(comment);
+        });
+        return $on;
+    },
+    commentComment : function(Socket, $scope) {
+        Socket.on('add:comment:comment:' + $scope.comment.id, function(comment) {
+            $scope.comment.comments.push(comment);
+        });
+        return $on;
+    }
+};
+
+redditControllers.controller('EntryDetailListenerCtrl', ['$scope', 'Entry', 'Html', 'Socket', function($scope, Entry, Html, Socket) {
+
+    $scope.entry.$promise.then(function() {
+        $on.entryVote(Socket, $scope).entryComment(Socket, $scope);
+    });
+
+}]);
+
+redditControllers.controller('CommentListCtrl', ['$scope', 'Comment', 'Socket', function($scope, Comment, Socket) {
     // $scope.comment inherited from parent controller
     // $scope.entry inherited from parent controller
-
+    // using static method as $scope.comment is not wrapped in Comment
     $scope.$up = function() {
-        // using static method as $scope.comment is not wrapped in Comment
         $scope.comment = Comment.up({ }, $scope.comment);
-
     };
 
     $scope.$down = function() {
         $scope.comment = Comment.down({ }, $scope.comment);
     };
+
+    Socket.on(['up:comment:'+ $scope.comment.id,'down:comment:'+ $scope.comment.id], function(rating) {
+        $scope.comment.rating.value = rating;
+    });
 
 }]);
 
@@ -126,6 +144,7 @@ redditControllers.controller('EntryDetailCtrl', ['$scope', '$routeParams', 'Entr
     $scope.entry = Entry.get({ id : $routeParams.entryId}, function(entry) {
 
         Html.setTitle(entry.title);
+        $on.entryVote(Socket, $scope).entryComment(Socket, $scope);
 
     });
 

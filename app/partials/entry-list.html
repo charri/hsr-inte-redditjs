@@ -1,13 +1,13 @@
 
 
-<div class="row" ng-repeat="entry in entries | orderBy:'rating.value':true">
+<div class="row" ng-repeat="entry in entries | orderBy:'rating.value':true" ng-controller="EntryListListenerCtrl">
     <div class="col-md-1">
         <br>
         <div class="row">
             <div class="text-center">
                 <button ng-click="entry.$up()" ng-disabled="!($root.hasUser)" class="btn-transparent"><span class="icon-material-keyboard-arrow-up"></span></button>
             </div>
-            <div class="text-center" ng-controller="EntryListenerCtrl">{{entry.rating.value}}</div>
+            <div class="text-center">{{entry.rating.value}}</div>
             <div  class="text-center">
                 <button ng-click="entry.$down()" ng-disabled="!($root.hasUser)" class="btn-transparent"><span class="icon-material-keyboard-arrow-down"></span></button>
             </div>

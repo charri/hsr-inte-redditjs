@@ -101,10 +101,15 @@ redditServices.factory('Socket', function ($rootScope) {
     var socket = io.connect();
     return {
         on: function (eventName, callback) {
-            socket.on(eventName, function () {
-                var args = arguments;
-                $rootScope.$apply(function () {
-                    callback.apply(socket, args);
+            if(!angular.isArray(eventName)) eventName = [eventName];
+            angular.forEach(eventName, function(event) {
+                console.log('register', event);
+                socket.on(event, function () {
+                    console.log(event, arguments);
+                    var args = arguments;
+                    $rootScope.$apply(function () {
+                        callback.apply(socket, args);
+                    });
                 });
             });
         },
