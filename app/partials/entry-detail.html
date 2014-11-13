@@ -66,7 +66,7 @@
                 </form>
             </div>
 
-            <div class="comment-container" id="comment-{{comment.id}}" ng-repeat="comment in comment.comments" ng-include="'comments.html'"></div>
+            <div class="comment-container" id="comment-{{comment.id}}" ng-repeat="comment in comment.comments | orderBy:'rating.value':true" ng-include="'comments.html'"></div>
 
 
         </div>
@@ -97,5 +97,5 @@
 </div>
 </div>
 
-<div class="comment-container" id="comment-{{comment.id}}" ng-repeat="comment in entry.comments" ng-include="'comments.html'"></div>
+<div class="comment-container" id="comment-{{comment.id}}" ng-repeat="comment in entry.comments | orderBy:'rating.value':true" ng-include="'comments.html'"></div>
 <br>
