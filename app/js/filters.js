@@ -81,9 +81,8 @@ redditFilters.directive("socketListen", ['Socket', function(Socket) {
 
                     if(ngModel.$viewValue == value) return;
 
-                    scope.$apply(function() {
-                        ngModel.$setViewValue(value);
-                    });
+                    ngModel.$setViewValue(value);
+
                 });
 
                 hasRegistered = true;
