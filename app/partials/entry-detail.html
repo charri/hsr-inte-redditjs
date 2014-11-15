@@ -7,7 +7,7 @@
             <div class="text-center">
                 <button ng-click="entry.$up()" ng-disabled="!($root.hasUser)" class="btn-transparent"><span class="icon-material-keyboard-arrow-up"></span></button>
             </div>
-            <div class="text-center" socket-listen="vote:entry:{{entry.id}}" ng-model="entry.rating.value">{{entry.rating.value}}</div>
+            <div class="text-center" socket-listen="vote:entry:{{entry.id}}">{{entry.rating.value}}</div>
             <div  class="text-center">
                 <button ng-click="entry.$down()" ng-disabled="!($root.hasUser)" class="btn-transparent"><span class="icon-material-keyboard-arrow-down"></span></button>
             </div>
@@ -31,7 +31,7 @@
                 <div class="text-center">
                     <button ng-disabled="!($root.hasUser)" class="btn-transparent" ng-click="$up()"><span class="icon-material-keyboard-arrow-up"></span></button>
                 </div>
-                <div class="text-center" socket-listen="vote:comment:{{comment.id}}" ng-model="comment.rating.value">{{comment.rating.value}}</div>
+                <div class="text-center" socket-listen="vote:comment:{{comment.id}}">{{comment.rating.value}}</div>
                 <div  class="text-center">
                     <button ng-disabled="!($root.hasUser)" class="btn-transparent" ng-click="$down()"><span class="icon-material-keyboard-arrow-down"></span></button>
                 </div>

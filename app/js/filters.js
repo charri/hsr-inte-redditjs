@@ -62,9 +62,7 @@ redditFilters.directive("passwordVerify", function() {
 
 redditFilters.directive("socketListen", ['Socket', function(Socket) {
     return {
-        restrict: 'EA',
-        require: "?ngModel",
-        $stateful : true,
+        restrict: 'A',
         link: function(scope, element, attrs, ngModel) {
 
             if(!attrs.socketListen) return;
@@ -79,9 +77,13 @@ redditFilters.directive("socketListen", ['Socket', function(Socket) {
 
                 Socket.on(newValue, function(value) {
 
-                    if(ngModel.$viewValue == value) return;
+                    var rating = scope.comment ? scope.comment.rating : scope.entry.rating;
 
-                    ngModel.$setViewValue(value);
+                    if(rating.value == value) return;
+
+                    rating.value = value;
+
+                    //ngModel.$setViewValue(value);
 
                 });
 

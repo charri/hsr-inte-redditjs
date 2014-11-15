@@ -64,7 +64,7 @@ redditControllers.controller('EntryListListenerCtrl', ['$scope','Socket', 'AuthS
         }
     });
 
-    Socket.on('add:comment:entry:' + $scope.entry.id, function(comment) {
+    Socket.on(['add:comment:entry:' + $scope.entry.id, 'add:comment:sub:entry:' + $scope.entry.id], function(comment) {
         $scope.entry.comments.push(comment);
 
         if(AuthService.hasUser
