@@ -31,6 +31,8 @@ Dependencies
 **JS**
 - angular https://angularjs.org/
 - angular-relative-date https://github.com/wildlyinaccurate/angular-relative-date
+- angular-translate https://github.com/angular-translate/angular-translate
+- angular-dynamic-locale https://github.com/lgalfaso/angular-dynamic-locale
 - jquery https://www.jquery.com
 - snackbarjs http://fezvrasta.github.io/snackbarjs/
 
