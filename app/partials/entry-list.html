@@ -7,7 +7,7 @@
             <div class="text-center">
                 <button ng-click="entry.$up()" ng-disabled="!($root.hasUser)" class="btn-transparent"><span class="icon-material-keyboard-arrow-up"></span></button>
             </div>
-            <div class="text-center">{{entry.rating.value}}</div>
+            <div class="text-center" socket-listen="vote:entry:{{entry.id}}" ng-model="entry.rating.value">{{entry.rating.value}}</div>
             <div  class="text-center">
                 <button ng-click="entry.$down()" ng-disabled="!($root.hasUser)" class="btn-transparent"><span class="icon-material-keyboard-arrow-down"></span></button>
             </div>
@@ -17,11 +17,11 @@
     <div class="col-xs-11">
         <h4><a href="{{entry.url}}" target="_blank">{{entry.title}}  <small>({{entry.url | domainName}})</small></a></h4>
 
-        <p>submitted {{entry.createTime | relativeDate}} by <strong>{{entry.author}}</strong></p>
-        <p>
-            <a href="entries/{{entry.id}}">
+        <p>{{ 'submitted' | translate }} {{entry.createTime | relativeDate}} {{'by' | translate }} <strong>{{entry.author}}</strong></p>
+        <p socket-listen to="add:comment:sub:entry:{{entry.id}}" on="$socket.comment">
+            <a href="entries/{{entry.id}}"  socket-listen to="add:comment:entry:{{entry.id}}" on="$socket.comment">
                 <span class="icon-material-forum"></span> &nbsp;
-                {{entry.comments | recursiveCommentCount}} comment(s).
+                {{entry.comments | recursiveCommentCount}} {{ 'comments' | translate }}
             </a>
         </p>
 

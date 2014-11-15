@@ -1,8 +1,9 @@
 (function() {
     'use strict';
-    angular.module('relativeDate', []).value('now', new Date()).filter('relativeDate', [
-        'now', function(now) {
-            return function(date) {
+    angular.module('relativeDate', ['pascalprecht.translate']).value('now', new Date()).filter('relativeDate', [
+        'now', '$translate', function(now, $translate) {
+
+            var filter = function(date) {
                 var calculateDelta, day, delta, hour, minute, month, week, year;
                 if (!(date instanceof Date)) {
                     date = new Date(date);
@@ -24,35 +25,41 @@
                 }
                 switch (false) {
                     case !(delta < 30):
-                        return 'just now';
+                        return $translate.instant('relativeDate.justNow');
                     case !(delta < minute):
-                        return "" + delta + " seconds ago";
+                        return $translate.instant('relativeDate.secondsAgo', {value: delta});
                     case !(delta < 2 * minute):
-                        return 'a minute ago';
+                        return $translate.instant('relativeDate.minuteAgo');
                     case !(delta < hour):
-                        return "" + (Math.floor(delta / minute)) + " minutes ago";
+                        return $translate.instant('relativeDate.minutesAgo', {value: (Math.floor(delta / minute))});
                     case Math.floor(delta / hour) !== 1:
-                        return 'an hour ago';
+                        return $translate.instant('relativeDate.hourAgo');
                     case !(delta < day):
-                        return "" + (Math.floor(delta / hour)) + " hours ago";
+                        return $translate.instant('relativeDate.hoursAgo', {value: (Math.floor(delta / hour))});
                     case !(delta < day * 2):
-                        return 'yesterday';
+                        return $translate.instant('relativeDate.yesterday');
                     case !(delta < week):
-                        return "" + (Math.floor(delta / day)) + " days ago";
+                        return $translate.instant('relativeDate.daysAgo', {value: (Math.floor(delta / day))});
                     case Math.floor(delta / week) !== 1:
-                        return 'a week ago';
+                        return $translate.instant('relativeDate.weekAgo');
                     case !(delta < month):
-                        return "" + (Math.floor(delta / week)) + " weeks ago";
+                        return $translate.instant('relativeDate.weeksAgo', {value: (Math.floor(delta / week))});
                     case Math.floor(delta / month) !== 1:
-                        return 'a month ago';
+                        return $translate.instant('relativeDate.monthAgo');
                     case !(delta < year):
-                        return "" + (Math.floor(delta / month)) + " months ago";
+                        return $translate.instant('relativeDate.monthsAgo', {value: (Math.floor(delta / month))});
                     case Math.floor(delta / year) !== 1:
-                        return 'a year ago';
+                        return $translate.instant('relativeDate.yearAgo');
                     default:
-                        return 'over a year ago';
+                        return $translate.instant('relativeDate.yearsAgo');
                 }
             };
+
+            // Since AngularJS 1.3, filters which are not stateless (depending at the scope)
+            // have to explicit define this behavior
+            filter.$stateful = true;
+
+            return filter;
         }
     ]);
 

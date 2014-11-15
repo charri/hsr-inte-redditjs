@@ -24,6 +24,8 @@
     <script src="libs/angular-1.3.2/angular-route.min.js"></script>
     <script src="libs/angular-1.3.2/angular-resource.min.js"></script>
     <script src="libs/angular-relative-date/angular-relative-date.js"></script>
+    <script src="libs/angular-dynamic-locale/tmhDynamicLocale.min.js"></script>
+    <script src="libs/angular-translate/angular-translate.min.js"></script>
 
     <script src="/socket.io/socket.io.js"></script>
 
@@ -54,31 +56,31 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav" ng-controller="NavigationCtrl">
-                    <li ng-class="menuClass('entries')"><a href="/app/entries">Home</a></li>
-                    <li ng-class="menuClass('submit')" ng-show="$root.hasUser"><a href="/app/submit">Submit</a></li>
+                    <li ng-class="menuClass('entries')"><a href="/app/entries">{{ 'Home' | translate }}</a></li>
+                    <li ng-class="menuClass('submit')" ng-show="$root.hasUser"><a href="/app/submit">{{ 'Submit' | translate }}</a></li>
                 </ul>
                 <div ng-controller="UserLoginBarCtrl" ng-cloak class="ng-cloak" ng-show="$root.initAuth && show">
                     <div ng-show="$root.hasUser">
                         <ul class="nav navbar-nav navbar-right">
-                            <li class="hidden-xs"><a href="#">Hello <strong>{{user.name}}</strong></a></li>
-                            <li>&nbsp;&nbsp;<button  class="btn btn-success withripple" ng-click="_logout()">Logout</button></li>
+                            <li class="hidden-xs"><a href="#">{{ 'Hello' | translate }} <strong>{{user.name}}</strong></a></li>
+                            <li>&nbsp;&nbsp;<button  class="btn btn-success withripple" ng-click="_logout()">{{ 'Logout' | translate }}</button></li>
                         </ul>
                     </div>
 
                     <div ng-hide="$root.hasUser">
                         <form class="navbar-form navbar-right" name="form" role="form" style="margin-top:2px;margin-bottom: 0px;" novalidate>
                             <div class="form-group visible-md-inline-block visible-lg-inline-block">
-                                <input type="text" class="form-control" ng-model="login.name" placeholder="username" required>
+                                <input type="text" class="form-control" ng-model="login.name" placeholder="{{ 'Username' | translate }}" required>
                             </div>
                             <div class="form-group visible-md-inline-block visible-lg-inline-block">
                                 <input type="password" class="form-control" ng-model="login.password" placeholder="******" required>
                             </div>
                             <div class="form-group">
-                                <button  class="btn btn-success withripple visible-md-inline-block visible-lg-inline-block" ng-click="_login()" ng-disabled="form.$invalid">Login</button>
-                                <a class="btn btn-success withripple visible-xs-inline-block visible-sm-inline-block" href="/app/login">login</a>
+                                <button  class="btn btn-success withripple visible-md-inline-block visible-lg-inline-block" ng-click="_login()" ng-disabled="form.$invalid">{{ 'Login' | translate }}</button>
+                                <a class="btn btn-success withripple visible-xs-inline-block visible-sm-inline-block" href="/app/login">{{ 'Login' | translate }}</a>
                             </div>
                             <div class="form-group">
-                                <a class="btn btn-info withripple" href="/app/register">Register</a>
+                                <a class="btn btn-info withripple" href="/app/register">{{ 'Register' | translate }}</a>
                             </div>
                         </form>
                     </div>
@@ -98,7 +100,12 @@
             <div class="col-md-12">
                 <br /><div class="noUi-origin noUi-background" style="position:static;"></div><br />
 
-                <p style="display:inline-block;">&copy; clone industries 2014</p>
+                <p style="display:inline-block;">&copy; clone industries 2014&nbsp;&nbsp;|&nbsp;&nbsp;</p>
+
+                <form class="form-inline" style="display:inline-block;" ng-controller="LocaleCtrl">
+                    <select class="form-control" ng-model="locale" ng-options="l.label for l in locales"></select>
+                </form>
+
             </div>
         </div>
     </div>

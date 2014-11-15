@@ -59,3 +59,37 @@ redditFilters.directive("passwordVerify", function() {
         }
     };
 });
+
+redditFilters.directive("socketListen", ['Socket', function(Socket) {
+    return {
+        restrict: 'EA',
+        require: "?ngModel",
+        $stateful : true,
+        link: function(scope, element, attrs, ngModel) {
+
+            if(!attrs.socketListen) return;
+
+            var hasRegistered = false;
+
+            scope.$watch(function() {
+               return  attrs.socketListen;
+            }, function(newValue) {
+
+                if(!newValue || newValue[newValue.length - 1] == ':' || hasRegistered) return;
+
+                Socket.on(newValue, function(value) {
+
+                    if(ngModel.$viewValue == value) return;
+
+                    scope.$apply(function() {
+                        ngModel.$setViewValue(value);
+                    });
+                });
+
+                hasRegistered = true;
+
+            });
+
+        }
+    };
+}]);

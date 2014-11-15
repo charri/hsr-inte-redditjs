@@ -35,13 +35,14 @@ var comments = [];
 var commentMap = [];
 
 //sample data
-entries.push(new Link(entries.length, "Title", "Author", "http://www.google.ch"));
-var comment = new Comment(0, "TestComment", "Author");
+entries.push(new Link(entries.length, "Title", "a", "http://www.google.ch"));
+var comment = new Comment(0, "TestComment", "a");
 comments.push(comment);
 entries[0].comments.push(comment);
 commentMap[comment.id] = entries[0].id;
 //default user
 users.push(new User(users.length, "a", "a") );
+users.push(new User(users.length, "b", "b") );
   
 function findUser(name)
 {
@@ -132,14 +133,14 @@ app.post('/entry/:id/up', checkAuth, function (req, res) {
     var rating = entries[req.params.id].rating._up(req.session.user_id);
     res.json(entries[req.params.id]);
     io.sockets.emit('message', { action: "Rated" });
-    io.sockets.emit('up:entry:' + req.params.id, rating);
+    io.sockets.emit('vote:entry:' + req.params.id, rating);
 });
 
 app.post('/entry/:id/down', checkAuth, function (req, res) {
     var rating = entries[req.params.id].rating._down(req.session.user_id);
     res.json(entries[req.params.id]);
     io.sockets.emit('message', { action: "Rated" });
-    io.sockets.emit('down:entry:' + req.params.id, rating);
+    io.sockets.emit('vote:entry:' + req.params.id, rating);
 });
 
 app.post('/entry/:id/comment', checkAuth, function (req, res) {
@@ -175,14 +176,14 @@ app.post('/comment/:id/up', checkAuth, function (req, res) {
     var rating = comments[req.params.id].rating._up(req.session.user_id);
     res.json(comments[req.params.id]);
     io.sockets.emit('message', { action: "Rated" });
-    io.sockets.emit('up:comment:' + req.params.id, rating);
+    io.sockets.emit('vote:comment:' + req.params.id, rating);
 });
 
 app.post('/comment/:id/down', checkAuth, function (req, res) {
     var rating = comments[req.params.id].rating._down(req.session.user_id);
     res.json(comments[req.params.id]);
     io.sockets.emit('message', { action: "Rated" });
-    io.sockets.emit('down:comment:' + req.params.id, rating);
+    io.sockets.emit('vote:comment:' + req.params.id, rating);
 });
 
 app.post('/logout', function (req, res) {

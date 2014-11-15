@@ -3,38 +3,38 @@
 <div class="col-md-12">
 <form class="form-horizontal" name="form" novalidate>
 
-    <h1>Register</h1>
+    <h1 translate="Register">Register</h1>
 
-    <p>Become an awesome member of clone(Reddit)!</p>
+    <p translate="registerMessage">Become an awesome member of clone(Reddit)!</p>
 
     <div class="form-group">
-        <label class="col-sm-2 control-label" for="alias">Name</label>
+        <label class="col-sm-2 control-label" for="alias" translate="Username">Name</label>
         <div class="col-sm-10">
-            <input name="alias" type="text" ng-model="user.name" placeholder="Username" class="form-control" required>
+            <input name="alias" type="text" ng-model="user.name" placeholder="{{ 'Username' | translate }}" class="form-control" required>
             <div class="alert alert-warning" ng-show="nameExists" style="margin-top:5px; margin-bottom:0px;">
-                <p><strong>Oh snap!</strong> Looks like that username is already taken.</p>
+                <p><strong translate="errorTitle">Oh snap!</strong> <span translate="errorExists">Looks like that username is already taken.</span></p>
             </div>
         </div>
     </div>
 
     <div class="form-group">
-        <label class="col-sm-2 control-label" for="password">Password</label>
+        <label class="col-sm-2 control-label" for="password" translate="Password">Password</label>
         <div class="col-sm-10">
             <input name="password" type="password" ng-model="user.password" placeholder="***" class="form-control" required>
         </div>
     </div>
 
     <div class="form-group">
-        <label class="col-sm-2 control-label" for="password2">Password repeat</label>
+        <label class="col-sm-2 control-label" for="password2" translate="PasswordRepeat">Password repeat</label>
         <div class="col-sm-10">
             <input name="password2" type="password" ng-model="passwordRepeat" placeholder="***" class="form-control" required data-password-verify="user.password">
-            <span class="help-block" ng-show="form.password2.$error.passwordVerify">Passwords must match.</span>
+            <span class="help-block" ng-show="form.password2.$error.passwordVerify" translate="errorPasswordVerify">Passwords must match.</span>
         </div>
     </div>
 
     <div class="form-group">
         <div class="col-sm-10 col-sm-offset-2">
-            <button class="btn btn-primary btn-raised" type="submit" ng-click="$save()" ng-disabled="form.$invalid">Register</button>
+            <button class="btn btn-primary btn-raised" type="submit" ng-click="$save()" ng-disabled="form.$invalid" translate="Register">Register</button>
         </div>
     </div>
 
