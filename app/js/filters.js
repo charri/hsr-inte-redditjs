@@ -69,23 +69,27 @@ redditFilters.directive("socketListen", ['Socket', function(Socket) {
 
             var hasRegistered = false;
 
+            var fn = function(value) {
+
+                if(scope.comment) {
+                    console.log('comment', scope.comment, value);
+                    scope.comment.rating.value = value;
+                } else {
+                    scope.entry.rating.value = value;
+                }
+                //ngModel.$setViewValue(value);
+
+            };
+
             scope.$watch(function() {
                return  attrs.socketListen;
             }, function(newValue) {
 
+                // if the scope has not completely been loaded then we need to wait until the directive is invoke again.
                 if(!newValue || newValue[newValue.length - 1] == ':' || hasRegistered) return;
 
-                Socket.on(newValue, function(value) {
-
-                    var rating = scope.comment ? scope.comment.rating : scope.entry.rating;
-
-                    if(rating.value == value) return;
-
-                    rating.value = value;
-
-                    //ngModel.$setViewValue(value);
-
-                });
+                Socket.off(newValue, fn);
+                Socket.on(newValue, fn);
 
                 hasRegistered = true;
 

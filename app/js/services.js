@@ -3,7 +3,7 @@ var redditServices = angular.module('redditServices', ['ngResource']);
 redditServices.constant("jQuery", window.$);
 
 redditServices.service('Html', [function() {
-    this.title = 'clone(Reddit)';
+    this.title = 'clone(Reddit)'; // for changing title
     this.setTitle = function(newTitle) { this.title = newTitle + ' - clone(Reddit)'; }
 }]);
 
@@ -109,15 +109,27 @@ redditServices.factory('Socket', function ($rootScope) {
         on: function (eventName, callback) {
             if(!angular.isArray(eventName)) eventName = [eventName];
             angular.forEach(eventName, function(event) {
-                console.log('register', event);
                 socket.on(event, function () {
-                    console.log(event, arguments);
                     var args = arguments;
                     $rootScope.$apply(function () {
                         callback.apply(socket, args);
                     });
                 });
             });
+        },
+        off: function(eventName, callback) {
+            if(!angular.isArray(eventName)) eventName = [eventName];
+
+            if(callback) {
+                angular.forEach(eventName, function(event) {
+                    socket.removeListener(event, callback);
+                });
+            }
+            else {
+                angular.forEach(eventName, function(event) {
+                    socket.removeAllListeners(event);
+                });
+            }
         },
         emit: function (eventName, data, callback) {
             socket.emit(eventName, data, function () {

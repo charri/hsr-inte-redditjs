@@ -40,7 +40,7 @@ redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', 'Snack
 
     Html.setTitle('home');
 
-
+    Socket.off('add:entry');
     Socket.on('add:entry', function(id) {
         $scope.entries.push(Entry.get({ id : id}, function(entry) {
             if(AuthService.hasUser
@@ -55,6 +55,7 @@ redditControllers.controller('EntryListCtrl', ['$scope', 'Entry', 'Html', 'Snack
 redditControllers.controller('EntryListListenerCtrl', ['$scope','Socket', 'AuthService', 'Snackbar', '$translate', 'Entry',
     function($scope, Socket, AuthService, Snackbar, $translate, Entry) {
 
+    Socket.off(['add:comment:entry:' + $scope.entry.id, 'add:comment:sub:entry:' + $scope.entry.id]);
 
     $scope.$watch('entry.rating.value', function(newValue, oldValue) {
         if(newValue == oldValue) return;
@@ -77,22 +78,27 @@ redditControllers.controller('EntryListListenerCtrl', ['$scope','Socket', 'AuthS
 
 }]);
 
-redditControllers.controller('CommentListCtrl', ['$scope', 'Comment', 'Socket', '$q', 'AuthService', 'Snackbar', '$translate',
-    function($scope, Comment, Socket, $q, AuthService, Snackbar, $translate) {
+redditControllers.controller('CommentListCtrl', ['$scope', 'Comment', 'Socket', '$q', 'AuthService', 'Snackbar', '$translate', '$filter',
+    function($scope, Comment, Socket, $q, AuthService, Snackbar, $translate, $filter) {
     // $scope.comment inherited from parent controller
     // $scope.entry inherited from parent controller
     // using static method as $scope.comment is not wrapped in Comment
 
     var local = false;
     $scope.$up = function() { local = true;
-        $scope.comment = Comment.up({ }, $scope.comment);
+         Comment.up({ }, $scope.comment, function (value) {
+             $scope.comment.rating.value = value.rating.value; // update through callback as return is a promise and messes up the orderby
+        });
     };
 
     $scope.$down = function() { local = true;
-        $scope.comment = Comment.down({ }, $scope.comment);
+        Comment.down({ }, $scope.comment, function(value) {
+            $scope.comment.rating.value = value.rating.value; // update through callback as return is a promise and messes up the orderby
+        });
     };
 
-    $scope.$watch('comment.rating.value', function(oldValue, newValue) {
+    $scope.$watch('comment.rating.value', function(newValue, oldValue) {
+
         if(oldValue == newValue || local) {
             local = false;
             return;
@@ -101,8 +107,10 @@ redditControllers.controller('CommentListCtrl', ['$scope', 'Comment', 'Socket', 
         if(AuthService.hasUser && $scope.comment.author == AuthService.userInfo.name) {
             Snackbar.snack($translate.instant('snack.newVoteComment'));
         }
+
     });
 
+    Socket.off('add:comment:comment:' + $scope.comment.id);
     Socket.on('add:comment:comment:' + $scope.comment.id, function(comment) {
         $scope.comment.comments.push(comment);
     });
@@ -178,6 +186,7 @@ redditControllers.controller('EntryDetailCtrl', ['$scope', '$routeParams', 'Entr
             }
         });
 
+        Socket.off('add:comment:entry:' + entry.id);
         Socket.on('add:comment:entry:' + entry.id, function(comment) {
             $scope.entry.comments.push(comment);
 
